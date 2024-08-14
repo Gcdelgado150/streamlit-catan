@@ -38,64 +38,66 @@ if 'players' not in st.session_state:
 if st.button("Reset players"):
     reset_players_list()
 
-cols = st.columns(6)
+with st.expander("Rolar dados"):
+    cols = st.columns(6)
 
-for i, col in enumerate(cols):
-    with col:
-        if st.button(f"Dado {i+1}"):
-            roll_dice(i+1)
+    for i, col in enumerate(cols):
+        with col:
+            if st.button(f"Dado {i+1}"):
+                roll_dice(i+1)
 
-cols = st.columns(6)
-for i, col in enumerate(cols):
-    with col:
-        if st.button(f"Dado {i+7}"):
-            roll_dice(i+7)
+    cols = st.columns(6)
+    for i, col in enumerate(cols):
+        with col:
+            if st.button(f"Dado {i+7}"):
+                roll_dice(i+7)
 
 
 if len(st.session_state.players) > 0:
     for this_player in st.session_state.players:
-        with st.container(border=True):
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.write("Name:")
-            with col2:
-                st.write(this_player.name)
-            with col3:
-                this_player.add_clear_button()
-
-            # FOr each resource we create a 3 cols
-            # name : amount: - +
-            for resource in ["madeira", "barro", "ovelha", "trigo", "ferro"]:
-
+        with st.expander(this_player.name):
+            with st.container(border=True):
                 col1, col2, col3 = st.columns(3)
                 with col1:
-                    st.write(f'{resource.capitalize()}: ')
-
+                    st.write("Name:")
                 with col2:
-                    st.write(this_player.resources[resource])
-
+                    st.write(this_player.name)
                 with col3:
-                    col_minus, col_plus = st.columns(2)
+                    this_player.add_clear_button()
 
-                    # For each resource we create a plus and minus button
-                    with col_minus:
-                        this_player.add_minus(resource)
-                    with col_plus:
-                        this_player.add_plus(resource)
-            
-            # The quick buttons
-            col_road, col_village, col_city, col_dc,col_dice =  st.columns(5)
+                # FOr each resource we create a 3 cols
+                # name : amount: - +
+                for resource in ["madeira", "barro", "ovelha", "trigo", "ferro"]:
 
-            with col_road:
-                this_player.add_road_button()
-            with col_village:
-                this_player.add_village_button()
-            with col_city:
-                this_player.add_city_button()
-            with col_dc:
-                this_player.add_dc_button()
-            with col_dice:
-                if st.button("Add dado", key=f"add_dado_{this_player.ID}"):
-                    add_dado(this_player)
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.write(f'{resource.capitalize()}: ')
+
+                    with col2:
+                        st.write(this_player.resources[resource])
+
+                    with col3:
+                        col_minus, col_plus = st.columns(2)
+
+                        # For each resource we create a plus and minus button
+                        with col_minus:
+                            this_player.add_minus(resource)
+                        with col_plus:
+                            this_player.add_plus(resource)
+                
+                # The quick buttons
+                col_road, col_village, col_city, col_dc,col_dice =  st.columns(5)
+
+                with col_road:
+                    this_player.add_road_button()
+                with col_village:
+                    this_player.add_village_button()
+                with col_city:
+                    this_player.add_city_button()
+                with col_dc:
+                    this_player.add_dc_button()
+                with col_dice:
+                    if st.button("Add dado", key=f"add_dado_{this_player.ID}"):
+                        add_dado(this_player)
 else:
     st.write("No players yet")
